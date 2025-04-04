@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Create New Blog Post</h1>
+    <form id="postForm">
+        <input type="text" id="title" placeholder="Title" required>
+        <textarea id="content" placeholder="Write your post..." required></textarea>
+        <button type="submit">Publish</button>
+    </form>
+
+    <script>
+        document.getElementById("postForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            let posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+            let newPost = {
+                id: Date.now(),
+                title: document.getElementById("title").value,
+                content: document.getElementById("content").value
+            };
+
+            posts.push(newPost);
+            localStorage.setItem("blogPosts", JSON.stringify(posts));
+
+            alert("Post created successfully!");
+            window.location.href = "index.html";
+        });
+    </script>
+</body>
+</html>

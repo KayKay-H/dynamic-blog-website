@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Post</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>View Blog Post</h1>
+    <div id="post-content"></div>
+    <button onclick="editPost()">Edit</button>
+    <button onclick="deletePost()">Delete</button>
+
+    <script>
+        let postId = new URLSearchParams(window.location.search).get("id");
+        let posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+        let post = posts.find(p => p.id == postId);
+
+        if (post) {
+            document.getElementById("post-content").innerHTML = `
+                <h2>${post.title}</h2>
+                <p>${post.content}</p>
+            `;
+        } else {
+            document.getElementById("post-content").innerHTML = "<p>Post not found.</p>";
+        }
+
+        function editPost() {
+            let newTitle = prompt("Edit title:", post.title);
+            let newContent = prompt("Edit content:", post.content);
+
+            if (newTitle && newContent) {
+                post.title = newTitle;
+                post.content = newContent;
+                localStorage.setItem("blogPosts", JSON.stringify(posts));
+                alert("Post updated!");
+                location.reload();
+            }
+        }
+
+        function deletePost() {
+            let confirmDelete = confirm("Are you sure you want to delete this post?");
+            if (confirmDelete) {
+                let updatedPosts = posts.filter(p => p.id != postId);
+                localStorage.setItem("blogPosts", JSON.stringify(updatedPosts));
+                alert("Post deleted!");
+                window.location.href = "index.html";
+            }
+        }
+    </script>
+</body>
+</html>
